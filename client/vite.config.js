@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: [
-      "cipherschoolslearningsql.onrender.com"
+      "cslearningsql.onrender.com"
     ]
   }
 });
