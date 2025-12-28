@@ -3,7 +3,8 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  preview: {
+  server: {
+    host: true,
     allowedHosts: [
       "cipherschoolslearningsql.onrender.com"
     ]
