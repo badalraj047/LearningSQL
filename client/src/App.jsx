@@ -1,4 +1,8 @@
 import AssignmentList from "./pages/AssignmentList";
-export default function App() {
+import "./styles/main.scss";
+
+function App() {
   return <AssignmentList />;
 }
+
+export default App;

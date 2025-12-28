@@ -1,3 +1,16 @@
-@import "variables";
-@import "mixins";
-body { margin:0; font-family:sans-serif; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  padding: 16px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+}
+
+button {
+  margin-right: 8px;
+  margin-top: 8px;
+  padding: 6px 12px;
+}
