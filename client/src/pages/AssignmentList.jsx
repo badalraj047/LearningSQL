@@ -1,48 +1,56 @@
 import { useEffect, useState } from "react";
-import { getAssignments } from "../api/api";
+import DifficultyFilter from "../components/DifficultyFilter";
+import AssignmentCard from "../components/AssignmentCard";
 import SqlEditor from "../components/SqlEditor";
+
+const API = "https://learningsql.onrender.com";
 
 export default function AssignmentList() {
   const [assignments, setAssignments] = useState([]);
+  const [level, setLevel] = useState("Easy");
   const [selected, setSelected] = useState(null);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    getAssignments().then(setAssignments);
+    fetch(`${API}/api/assignments`)
+      .then(res => res.json())
+      .then(data => setAssignments(data));
   }, []);
 
-  if (selected) {
-    return (
-      <div>
-        <h2>{selected.title}</h2>
-        <p><b>Difficulty:</b> {selected.description}</p>
-        <p>{selected.question}</p>
-
-        <h4>Sample Table: employees</h4>
-        <ul>
-          <li>id (INTEGER)</li>
-          <li>name (TEXT)</li>
-          <li>salary (INTEGER)</li>
-        </ul>
-
-        <SqlEditor question={selected.question} />
-
-        <br />
-        <button onClick={() => setSelected(null)}>⬅ Back</button>
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <h1>CipherSQLStudio</h1>
+    <div className="layout">
+      {/* LEFT PANEL */}
+      <aside className="sidebar">
+        <h2>Assignments</h2>
+        <DifficultyFilter level={level} setLevel={setLevel} />
 
-      {assignments.map((a) => (
-        <div key={a._id} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-          <h3>{a.title}</h3>
-          <p>{a.description}</p>
-          <button onClick={() => setSelected(a)}>Attempt</button>
-        </div>
-      ))}
+        {assignments
+          .filter(a => (a.difficulty || "Easy") === level)
+          .map(a => (
+            <AssignmentCard
+              key={a._id}
+              assignment={a}
+              onSelect={setSelected}
+            />
+          ))}
+      </aside>
+
+      {/* RIGHT PANEL */}
+      <main className="workspace">
+        {selected ? (
+          <>
+            <h2>{selected.title}</h2>
+            <p className="question">{selected.question}</p>
+
+            <SqlEditor query={query} setQuery={setQuery} />
+
+            <button className="run-btn">Run Query</button>
+            <button className="hint-btn">Get Hint</button>
+          </>
+        ) : (
+          <p>Select an assignment to start</p>
+        )}
+      </main>
     </div>
   );
 }
